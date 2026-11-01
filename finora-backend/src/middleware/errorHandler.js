@@ -9,6 +9,9 @@ function errorHandler(err, req, res, next) {
     message = err.errors?.[0]?.message || 'Validation failed';
   }
 
+  // Log error for server observability without exposing to client
+  console.error('[SERVER ERROR]', err.name || 'Error', err.message || err);
+
   // Security rule: Never send stack traces, SQL errors, or Prisma error details to client
   res.status(statusCode).json({
     error: {

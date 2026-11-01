@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node src/server.js",
+    "build": "prisma generate",
+    "postinstall": "prisma generate",
     "prisma:push": "prisma db push",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
@@ -23,9 +25,7 @@
     "google-auth-library": "^11.0.2",
     "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.2",
+    "prisma": "^5.18.0",
     "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "prisma": "^5.18.0"
   }
 }
