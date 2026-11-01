@@ -1,0 +1,124 @@
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: #0A0A0A;
+  }
+
+  body {
+    background-color: #0A0A0A;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    color: #F5F5F5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: #D4FF3A;
+    color: #0A0A0A;
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  :focus-visible {
+    outline: 2px solid #D4FF3A;
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0A0A0A;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #262626;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #333333;
+  }
+}
+
+@layer components {
+  /* Surfaces and Cards */
+  .surface-card {
+    background-color: #111111;
+    border: 1px solid #262626;
+  }
+
+  .card-data {
+    background-color: #111111;
+    border: 1px solid #262626;
+  }
+
+  .glass {
+    background-color: #111111;
+    border: 1px solid #262626;
+  }
+
+  .glass-elevated {
+    background-color: #161616;
+    border: 1px solid #333333;
+  }
+
+  /* Form Elements */
+  .input-field {
+    width: 100%;
+    background-color: #111111;
+    border: 1px solid #262626;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #F5F5F5;
+    outline: none;
+    transition: border-color 150ms ease;
+  }
+
+  .input-field::placeholder {
+    color: #8A8A8A;
+  }
+
+  .input-field:focus {
+    border-color: #D4FF3A;
+  }
+
+  .select-field {
+    width: 100%;
+    background-color: #111111;
+    border: 1px solid #262626;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #F5F5F5;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 150ms ease;
+  }
+
+  .select-field:focus {
+    border-color: #D4FF3A;
+  }
+
+  .select-field option {
+    background-color: #111111;
+    color: #F5F5F5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

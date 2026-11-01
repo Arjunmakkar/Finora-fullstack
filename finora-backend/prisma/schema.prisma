@@ -1,0 +1,110 @@
+// FINORA — Prisma schema for MongoDB Atlas
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  email        String   @unique
+  passwordHash String
+  name         String
+  currency     String   @default("INR")
+  createdAt    DateTime @default(now())
+
+  accounts      Account[]
+  transactions  Transaction[]
+  budgets       Budget[]
+  investments   Investment[]
+  goals         Goal[]
+  subscriptions Subscription[]
+}
+
+model Account {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId  String  @db.ObjectId
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name    String
+  type    String  @default("BANK") // BANK, CASH, CREDIT_CARD, WALLET
+  balance Int     @default(0) // paise
+
+  transactions Transaction[]
+
+  @@index([userId])
+}
+
+model Transaction {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @db.ObjectId
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId     String   @db.ObjectId
+  account       Account  @relation(fields: [accountId], references: [id])
+  type          String   // INCOME | EXPENSE
+  amount        Int      // paise, always positive
+  category      String
+  description   String
+  merchant      String?
+  date          DateTime
+  paymentMethod String   @default("UPI")
+  recurring     Boolean  @default(false)
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  @@index([userId, date])
+  @@index([userId, category])
+}
+
+model Budget {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @db.ObjectId
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    String
+  month       String // "YYYY-MM"
+  limitAmount Int    // paise
+
+  @@unique([userId, category, month])
+}
+
+model Investment {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @db.ObjectId
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assetName     String
+  symbol        String?
+  assetType     String   // STOCK, MUTUAL_FUND, ETF, GOLD, FD, OTHER
+  quantity      Float
+  purchasePrice Int      // paise per unit
+  currentPrice  Int      // paise per unit
+  purchaseDate  DateTime
+
+  @@index([userId])
+}
+
+model Goal {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId              String   @db.ObjectId
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name                String
+  targetAmount        Int
+  savedAmount         Int      @default(0)
+  monthlyContribution Int
+  deadline            DateTime
+  createdAt           DateTime @default(now())
+}
+
+model Subscription {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @db.ObjectId
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String
+  price         Int
+  billingCycle  String   @default("MONTHLY") // WEEKLY, MONTHLY, YEARLY
+  nextPayment   DateTime
+  category      String
+  paymentMethod String   @default("UPI")
+  active        Boolean  @default(true)
+}

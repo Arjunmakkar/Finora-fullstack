@@ -1,0 +1,68 @@
+:root {
+  /* FINORA Stark Black & White Design Rules */
+  --bg-void: #0A0A0A;
+  --bg-surface: #111111;
+  --bg-elevated: #161616;
+  --bg-overlay: rgba(10, 10, 10, 0.92);
+
+  /* Precise structural borders */
+  --border-subtle: #262626;
+  --border-strong: #333333;
+
+  /* Typography */
+  --text-primary: #F5F5F5;
+  --text-secondary: #8A8A8A;
+  --text-tertiary: #666666;
+
+  /* The Single Accent - Electric Citron / Acid Lime */
+  /* Used ONLY for: active nav item, primary buttons, and focus rings. Nothing else gets color. */
+  --accent-primary: #D4FF3A;
+  --accent-primary-hover: #C2ED28;
+  --accent-primary-text: #0A0A0A;
+
+  /* Mappings to avoid breaking existing classes during transition */
+  --accent-teal: #D4FF3A;
+  --accent-cyan: #F5F5F5;
+  --accent-emerald: #F5F5F5;
+  --accent-amber: #8A8A8A;
+  --accent-rose: #F5F5F5;
+  --accent-blue: #F5F5F5;
+  --accent-violet: #F5F5F5;
+
+  /* Radii */
+  --radius-sharp: 0px;
+  --radius-card: 4px;
+  --radius-xl: 6px;
+
+  /* Shadows - Minimal and crisp (no glows, no blobs) */
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.8);
+  --shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.9);
+
+  /* Motion */
+  --ease-finora: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 300ms;
+}
+
+html:not(.dark), html.light {
+  /* In accordance with rules: Stark black and white direction is default */
+  --bg-void: #0A0A0A;
+  --bg-surface: #111111;
+  --bg-elevated: #161616;
+  --bg-overlay: rgba(10, 10, 10, 0.92);
+
+  --border-subtle: #262626;
+  --border-strong: #333333;
+
+  --text-primary: #F5F5F5;
+  --text-secondary: #8A8A8A;
+  --text-tertiary: #666666;
+
+  --accent-primary: #D4FF3A;
+  --accent-primary-hover: #C2ED28;
+  --accent-primary-text: #0A0A0A;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.8);
+  --shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.9);
+}
