@@ -27,14 +27,27 @@ app.use(
 );
 
 // CORS: explicit origin allowlist with credentials. Never * with credentials.
-const allowedOrigins = [process.env.CLIENT_ORIGIN || 'http://localhost:5173'];
+const configuredOrigins = (process.env.CLIENT_ORIGIN || '')
+  .split(',')
+  .map((o) => o.trim().replace(/\/$/, ''))
+  .filter(Boolean);
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:4000',
+  'https://finora-fullstack.vercel.app',
+  ...configuredOrigins,
+];
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin) return callback(null, true);
+      const cleanOrigin = origin.replace(/\/$/, '');
+      if (allowedOrigins.includes(cleanOrigin) || cleanOrigin.endsWith('.vercel.app')) {
         return callback(null, true);
       }
-      return callback(new Error('Blocked by CORS origin allowlist'));
+      return callback(new Error(`Blocked by CORS origin allowlist: ${origin}`));
     },
     credentials: true,
   })
