@@ -188,11 +188,11 @@ export default function Dashboard() {
                 6-month cash flow line chart. Solid white line represents income. Dashed gray line represents spend.
               </div>
 
-              <div className="h-56 w-full">
+              <div className="h-56 w-full min-w-0 overflow-hidden">
                 {cashFlowLoading ? (
                   <Skeleton className="h-full w-full bg-[#161616]" />
                 ) : chartData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" debounce={50} minWidth={0}>
                     <LineChart data={chartData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
                       <CartesianGrid stroke="#262626" strokeDasharray="3 3" vertical={false} />
                       <XAxis

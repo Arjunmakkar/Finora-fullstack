@@ -10,7 +10,7 @@ let baseUrl;
 before(async () => {
   await new Promise((resolve) => {
     server = http.createServer(app);
-    server.listen(0, () => {
+    server.listen(0, '127.0.0.1', () => {
       const port = server.address().port;
       baseUrl = `http://127.0.0.1:${port}`;
       resolve();

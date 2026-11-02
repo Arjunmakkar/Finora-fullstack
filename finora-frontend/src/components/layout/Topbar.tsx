@@ -49,7 +49,7 @@ function NotificationBell() {
 
   useEffect(() => {
     if (!open) return;
-    const handleClickOutside = (e: MouseEvent) => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false);
       }
@@ -59,9 +59,11 @@ function NotificationBell() {
     };
 
     document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside, { passive: true });
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [open]);
@@ -200,11 +202,12 @@ export default function Topbar() {
       <div className="flex items-center gap-4">
         {/* Mobile menu toggle */}
         <button
+          type="button"
           onClick={toggleMobileNav}
-          className="min-h-[44px] min-w-[44px] rounded-[4px] p-2 text-[#8A8A8A] hover:bg-[#111111] hover:text-[#F5F5F5] md:hidden transition-colors flex items-center justify-center focus:outline-none focus:ring-1 focus:ring-[#D4FF3A]"
+          className="min-h-[44px] min-w-[44px] rounded-[4px] p-2 text-[#8A8A8A] hover:bg-[#111111] hover:text-[#F5F5F5] active:bg-[#161616] active:text-[#F5F5F5] md:hidden transition-colors flex items-center justify-center focus:outline-none focus:ring-1 focus:ring-[#D4FF3A] touch-manipulation cursor-pointer"
           aria-label="Open navigation menu"
         >
-          <Menu size={20} />
+          <Menu size={22} />
         </button>
 
         <div className="hidden md:flex flex-col">

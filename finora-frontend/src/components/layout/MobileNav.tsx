@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, Settings, LogOut } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import NavList from './NavList';
 import { useUIStore } from '@/store/uiStore';
 import { useAuthStore } from '@/store/authStore';
@@ -13,6 +14,32 @@ export default function MobileNav() {
   const user = useAuthStore((s) => s.user);
   const logout = useLogout();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Automatically close mobile nav whenever the route changes
+  useEffect(() => {
+    if (open) {
+      setOpen(false);
+    }
+  }, [location.pathname, location.search]);
+
+  // Lock body scroll and handle Escape key when drawer is open
+  useEffect(() => {
+    if (!open) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open, setOpen]);
 
   const onLogout = () => {
     setOpen(false);
@@ -21,28 +48,37 @@ export default function MobileNav() {
     });
   };
 
+  const handleSettingsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setOpen(false);
+    navigate('/settings');
+  };
+
   return createPortal(
     <AnimatePresence>
       {open && (
-        <div className="md:hidden">
-          {/* Full-height backdrop overlay */}
+        <div className="md:hidden relative z-[70]">
+          {/* Full-height backdrop overlay with high z-index */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-[70] bg-black/85 backdrop-blur-sm cursor-pointer touch-manipulation"
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
 
-          {/* Full-height Drawer */}
+          {/* Full-height Drawer per FINORA Design Rules */}
           <motion.aside
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', stiffness: 350, damping: 35 }}
-            className="fixed left-0 top-0 z-50 flex h-full w-[280px] max-w-[85vw] flex-col bg-[#0A0A0A] border-r border-[#262626]"
+            className="fixed left-0 top-0 bottom-0 z-[80] flex h-[100dvh] w-[280px] max-w-[85vw] flex-col bg-[#0A0A0A] border-r border-[#262626] shadow-2xl select-none"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation drawer"
           >
             {/* Header */}
             <div className="flex h-16 shrink-0 items-center justify-between px-5 border-b border-[#262626]">
@@ -53,8 +89,9 @@ export default function MobileNav() {
                 </span>
               </div>
               <button
+                type="button"
                 onClick={() => setOpen(false)}
-                className="min-h-[44px] min-w-[44px] flex items-center justify-center text-[#8A8A8A] hover:text-[#F5F5F5]"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center text-[#8A8A8A] hover:text-[#F5F5F5] active:text-[#F5F5F5] transition-colors rounded-[4px] touch-manipulation"
                 aria-label="Close menu"
               >
                 <X size={20} />
@@ -62,26 +99,27 @@ export default function MobileNav() {
             </div>
 
             {/* Navigation List */}
-            <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+            <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1 overscroll-contain">
               <NavList onNavigate={() => setOpen(false)} expanded={true} />
             </div>
 
-            {/* Footer */}
+            {/* Footer User Profile & Settings */}
             <div className="shrink-0 p-3 space-y-2 border-t border-[#262626] bg-[#0A0A0A]">
               <NavLink
                 to="/settings"
-                onClick={() => setOpen(false)}
-                className="min-h-[44px] flex items-center gap-3 rounded-[4px] px-3 text-14 font-medium text-[#8A8A8A] hover:text-[#F5F5F5] hover:bg-[#111111]"
+                onClick={handleSettingsClick}
+                className="min-h-[44px] flex items-center gap-3 rounded-[4px] px-3 text-14 font-medium text-[#8A8A8A] hover:text-[#F5F5F5] hover:bg-[#111111] active:bg-[#161616] transition-colors touch-manipulation"
               >
                 <Settings size={18} />
                 <span>Settings</span>
               </NavLink>
               <button
+                type="button"
                 onClick={onLogout}
-                className="min-h-[44px] w-full flex items-center gap-3 rounded-[4px] px-3 text-14 font-medium text-[#8A8A8A] hover:text-[#F5F5F5] hover:bg-[#111111]"
+                className="min-h-[44px] w-full flex items-center gap-3 rounded-[4px] px-3 text-14 font-medium text-[#8A8A8A] hover:text-[#F5F5F5] hover:bg-[#111111] active:bg-[#161616] transition-colors touch-manipulation"
               >
                 <LogOut size={18} />
-                <span>Sign out ({user?.name || 'Rohit'})</span>
+                <span>Sign out ({user?.name ? user.name.split(' ')[0] : 'Rohit'})</span>
               </button>
             </div>
           </motion.aside>
