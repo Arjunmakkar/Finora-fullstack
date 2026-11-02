@@ -57,25 +57,29 @@ export default function MobileNav() {
   return createPortal(
     <AnimatePresence>
       {open && (
-        <div className="md:hidden relative z-[70]">
+        <motion.div
+          key="mobile-nav-container"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-[70] md:hidden"
+        >
           {/* Full-height backdrop overlay with high z-index */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[70] bg-black/85 backdrop-blur-sm cursor-pointer touch-manipulation"
+          <div
+            className="absolute inset-0 bg-black/85 backdrop-blur-sm cursor-pointer touch-manipulation"
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
 
           {/* Full-height Drawer per FINORA Design Rules */}
           <motion.aside
+            key="mobile-nav-drawer"
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', stiffness: 350, damping: 35 }}
-            className="fixed left-0 top-0 bottom-0 z-[80] flex h-[100dvh] w-[280px] max-w-[85vw] flex-col bg-[#0A0A0A] border-r border-[#262626] shadow-2xl select-none"
+            className="relative z-10 flex h-[100dvh] w-[280px] max-w-[85vw] flex-col bg-[#0A0A0A] border-r border-[#262626] shadow-2xl select-none"
             role="dialog"
             aria-modal="true"
             aria-label="Navigation drawer"
@@ -123,7 +127,7 @@ export default function MobileNav() {
               </button>
             </div>
           </motion.aside>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>,
     document.body

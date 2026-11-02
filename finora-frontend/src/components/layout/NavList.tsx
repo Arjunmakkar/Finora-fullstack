@@ -14,10 +14,10 @@ export default function NavList({ onNavigate, expanded = true }: NavListProps) {
 
   const handleItemClick = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
-    navigate(path);
     if (onNavigate) {
       onNavigate();
     }
+    navigate(path);
   };
 
   return (
