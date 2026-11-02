@@ -109,14 +109,14 @@ export default function MobileNav() {
 
             {/* Footer User Profile & Settings */}
             <div className="shrink-0 p-3 space-y-2 border-t border-[#262626] bg-[#0A0A0A]">
-              <NavLink
-                to="/settings"
+              <button
+                type="button"
                 onClick={handleSettingsClick}
-                className="min-h-[44px] flex items-center gap-3 rounded-[4px] px-3 text-14 font-medium text-[#8A8A8A] hover:text-[#F5F5F5] hover:bg-[#111111] active:bg-[#161616] transition-colors touch-manipulation"
+                className="min-h-[44px] w-full flex items-center gap-3 rounded-[4px] px-3 text-14 font-medium text-[#8A8A8A] hover:text-[#F5F5F5] hover:bg-[#111111] active:bg-[#161616] transition-colors touch-manipulation"
               >
                 <Settings size={18} />
                 <span>Settings</span>
-              </NavLink>
+              </button>
               <button
                 type="button"
                 onClick={onLogout}

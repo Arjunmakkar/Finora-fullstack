@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { routes } from '@/app/routes';
 
@@ -11,9 +11,9 @@ interface NavListProps {
 
 export default function NavList({ onNavigate, expanded = true }: NavListProps) {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleItemClick = (e: React.MouseEvent, path: string) => {
-    e.preventDefault();
+  const handleItemClick = (path: string) => {
     if (onNavigate) {
       onNavigate();
     }
@@ -24,19 +24,19 @@ export default function NavList({ onNavigate, expanded = true }: NavListProps) {
     <nav className="space-y-1 py-1 select-none" aria-label="Main Navigation">
       {navRoutes.map((r) => {
         const Icon = (Icons as any)[r.navIcon ?? 'Circle'] ?? Icons.Circle;
+        const isActive = location.pathname === r.path;
         return (
-          <NavLink
+          <button
             key={r.path}
-            to={r.path}
-            onClick={(e) => handleItemClick(e, r.path)}
-            className={({ isActive }) =>
-              [
-                'group relative flex items-center gap-3 rounded-[4px] px-3 py-2.5 min-h-[44px] text-14 font-medium transition-colors duration-150 touch-manipulation',
-                isActive
-                  ? 'bg-[#161616] text-[#D4FF3A] border-l-2 border-[#D4FF3A]'
-                  : 'text-[#8A8A8A] hover:bg-[#111111] hover:text-[#F5F5F5] active:bg-[#141414]',
-              ].join(' ')
-            }
+            type="button"
+            data-path={r.path}
+            onClick={() => handleItemClick(r.path)}
+            className={[
+              'group relative flex w-full items-center gap-3 rounded-[4px] px-3 py-2.5 min-h-[44px] text-14 font-medium transition-colors duration-150 text-left touch-manipulation cursor-pointer',
+              isActive
+                ? 'bg-[#161616] text-[#D4FF3A] border-l-2 border-[#D4FF3A]'
+                : 'text-[#8A8A8A] hover:bg-[#111111] hover:text-[#F5F5F5] active:bg-[#141414]',
+            ].join(' ')}
           >
             <Icon size={18} className="shrink-0" />
             {expanded && (
@@ -44,7 +44,7 @@ export default function NavList({ onNavigate, expanded = true }: NavListProps) {
                 {r.navLabel}
               </span>
             )}
-          </NavLink>
+          </button>
         );
       })}
     </nav>
