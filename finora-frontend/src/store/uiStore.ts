@@ -54,3 +54,7 @@ export const useUIStore = create<UIState>((set) => ({
     });
   },
 }));
+
+if (typeof window !== 'undefined') {
+  (window as any).__uiStore = useUIStore;
+}

@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import MobileNav from './MobileNav';
 
 interface AppShellProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export default function AppShell({ children }: AppShellProps) {
@@ -25,7 +25,7 @@ export default function AppShell({ children }: AppShellProps) {
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6 overscroll-contain"
         >
-          {children}
+          {children || <Outlet />}
         </motion.main>
       </div>
     </div>

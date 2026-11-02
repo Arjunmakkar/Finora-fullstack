@@ -18,10 +18,8 @@ export default function MobileNav() {
 
   // Automatically close mobile nav whenever the route changes
   useEffect(() => {
-    if (open) {
-      setOpen(false);
-    }
-  }, [location.pathname, location.search]);
+    setOpen(false);
+  }, [location.pathname, location.search, setOpen]);
 
   // Lock body scroll and handle Escape key when drawer is open
   useEffect(() => {

@@ -32,23 +32,28 @@ export default function App() {
       <BrowserRouter>
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            {routes.map(({ path, element: Element, layout }) => (
-              <Route
-                key={path}
-                path={path}
-                element={
-                  layout === 'app' ? (
-                    <ProtectedRoute>
-                      <AppShell>
-                        <Element />
-                      </AppShell>
-                    </ProtectedRoute>
-                  ) : (
-                    <Element />
-                  )
-                }
-              />
-            ))}
+            {/* Standalone bare routes (landing, login, register, privacy) */}
+            {routes
+              .filter((r) => r.layout === 'bare')
+              .map(({ path, element: Element }) => (
+                <Route key={path} path={path} element={<Element />} />
+              ))}
+
+            {/* Persistent AppShell layout: preserves shell, mobile drawer, and topbar across routes */}
+            <Route
+              element={
+                <ProtectedRoute>
+                  <AppShell />
+                </ProtectedRoute>
+              }
+            >
+              {routes
+                .filter((r) => r.layout === 'app')
+                .map(({ path, element: Element }) => (
+                  <Route key={path} path={path} element={<Element />} />
+                ))}
+            </Route>
+
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
